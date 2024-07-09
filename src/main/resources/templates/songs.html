@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SiwMusic</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/index.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <style>
+
+        body {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .search-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .search-bar input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" style="border-bottom-style: ridge;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/"><img src="/siw-music-logo.png" width="150" alt="SiwMusic Logo"></a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <span th:if="${userDetails != null}">
+                            <a th:href="@{'/profile/' + ${userDetails.username}}" class="btn btn-primary"
+                                th:text="${userDetails.username}"></a>
+                        </span>
+                        <span th:unless="${userDetails != null}">
+                            <a href="/login" class="btn btn-primary">Login</a>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-4">
+        <div class="row">
+            <div class="col">
+                <h1>Songs</h1>
+            </div>
+            <div class="col">
+                <span>
+                    <form class="search-bar" action="/searchSong" method="GET">
+                        <input class="form-control" type="text" name="prefix" placeholder="Search" required>
+                        <button class="btn btn-primary" type="submit">search</button>
+                    </form>
+                </span>
+            </div>
+        </div>
+        <div th:if="${songs.isEmpty()}">
+            <p>any song uploaded yet.</p>
+        </div>
+        <ul class="list-group"  th:each="song : ${songs}">
+            <a th:href="@{'/song/' + ${song.id}}" class="list-group-item">
+                <span th:if="${song.image}">
+                    <img th:src="@{'/image/' + ${song.image.id}}" class="img-fluid rounded" alt="Artist Picture" style="width: 100px; height: 100px; object-fit: cover;">
+                </span>
+                <span class="display-5" th:text="${song.name} + ' (' +${song.artist.name} + ')' "></span>
+            </a>
+        </ul>
+    </div>
+    
+</body>
+</html>

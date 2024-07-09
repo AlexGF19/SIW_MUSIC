@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SiwMusic</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/index.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <style>
+
+        body {
+            font-family: 'Playfair Display', serif;
+        }
+
+    </style>
+
+</head>
+
+<body>
+    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" style="border-bottom-style: ridge;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/"><img src="/siw-music-logo.png" width="150" alt="SiwMusic Logo"></a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <span th:if="${userDetails != null}">
+                            <a th:href="@{'/profile/' + ${userDetails.username}}" class="btn btn-primary"
+                                th:text="${userDetails.username}"></a>
+                        </span>
+                        <span th:unless="${userDetails != null}">
+                            <a href="/login" class="btn btn-primary">Login</a>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-4">
+        <div>
+            <h1 class="display-1" th:text="${album.name}"></h1>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div th:if="${album.image}">
+                    <img th:src="@{'/image/' + ${album.image.id}}" class="img-fluid rounded" alt="Album Picture">
+                </div>
+                <div th:unless="${album.image}" class="text-center">
+                    <p>No album pic.</p>
+                </div>
+                <div class="d-grid gap-2 my-2">
+                    <a th:href="@{'/addAlbum/image/' + ${album.id}}" class="btn btn-secondary">change album image</a>
+                    <a th:href="@{'/editAlbum/' + ${album.id}}" class="btn btn-secondary">edit album</a>
+                </div>
+
+                <div th:if="${album.artist}" class="my-3">
+                    <a th:href="@{'/artist/' + ${album.artist.id}}" class="d-flex align-items-center">
+                        <span th:if="${album.artist.image}">
+                            <img th:src="@{'/image/' + ${album.artist.image.id}}" class="img-fluid rounded" alt="Song Picture" style="width: 50px; height: 50px; object-fit: cover;">
+                        </span>
+                        <strong th:text="${album.artist.name}" class="ms-2"></strong>
+                    </a>
+                </div>
+
+                <div th:if="${album.description}">
+                    <p><strong>info:</strong> <span th:text="${album.description}"></span></p>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <h2>Songs</h2>
+                <div th:if="${album.songs.isEmpty()}">
+                    <p>any song added yet.</p>
+                </div>
+                <ul class="list-group" th:each="song : ${album.songs}">
+                    <a th:href="@{'/song/' + ${song.id}}" class="list-group-item">
+                        <span th:if="${song.image}">
+                            <img th:src="@{'/image/' + ${song.image.id}}" class="img-fluid rounded" alt="Artist Picture" style="width: 100px; height: 100px; object-fit: cover;">
+                        </span>
+                        <strong th:text="${song.name}"></strong>
+                    </a>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
